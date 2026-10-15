@@ -1,3 +1,229 @@
+/* Importação da fonte Glacial Indifference */
+@import url('https://fonts.cdnfonts.com/css/glacial-indifference');
+
 body {
-  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 960px;
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid #1f1f23;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(220, 38, 38, 0.05);
+}
+
+.secao-marca {
+  flex: 1;
+  background-color: #09090b;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #1f1f23;
+}
+
+.caixa-logo {
+  width: 100%;
+  max-width: 240px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.logo-marca{
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.titulo-marca {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--primary-red);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.subtitulo-marca {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.secao-formulario {
+  flex: 1;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--card-bg);
+}
+
+.titulo-formulario {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  color: var(--text-primary);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.subtitulo-formulario {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.alerta {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.alerta-erro {
+  background-color: rgba(220, 38, 38, 0.15);
+  border: 1px solid var(--primary-red);
+  color: #fca5a5;
+}
+
+
+.formulario-login {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #d4d4d8;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  background-color: #202024;
+}
+
+.caixa-senha {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.caixa-senha input {
+  padding-right: 48px;
+}
+
+.alternar-senha {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.alternar-senha:hover {
+  color: var(--primary-red);
+}
+
+.botao-enviar {
+  margin-top: 10px;
+  width: 100%;
+  padding: 16px;
+  background-color: var(--primary-red);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.botao-enviar:hover {
+  background-color: var(--primary-red-hover);
+}
+
+.botao-enviar:active {
+  transform: scale(0.99);
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.esqueceu-senha-link {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.esqueceu-senha-link:hover {
+  color: var(--primary-red);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    max-width: 450px;
+  }
+
+  .secao-marca {
+    border-right: none;
+    border-bottom: 1px solid #1f1f23;
+    padding: 30px 20px;
+  }
+
+  .secao-formulario {
+    padding: 35px 25px;
+  }
+
+  .titulo-formulario {
+    font-size: 1.8rem;
+  }
 }
