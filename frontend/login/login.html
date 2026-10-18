@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>O Churrasqueiro - Login</title>
 
-  <!-- Google Fonts: Anton -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
@@ -18,8 +17,7 @@
 <div class="login-container">
   <div class="secao-marca">
     <div class="caixa-logo">
-      <!-- Tag da imagem pronta para receber seu arquivo-->
-      <img src="../shared/assets/logo.png" alt="Logo O Churrasqueiro" class="logo-marca">
+      <img src="../shared/assets/logo.png" alt="" class="logo-marca" onerror="this.style.display='none';">
     </div>
     <h1 class="titulo-marca">O CHURRASQUEIRO</h1>
     <p class="subtitulo-marca">Hamburgueria artesanal</p>
@@ -51,6 +49,11 @@
 
       <div class="form-footer">
         <a href="#" class="esqueceu-senha-link">Esqueceu sua senha?</a>
+        <div style="margin-top: 14px; border-top: 1px solid #27272a; padding-top: 14px;">
+          <a href="../cardapio/cardapio.html" class="esqueceu-senha-link" style="color: #ffffff; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-arrow-left"></i> Voltar ao Cardápio (Cliente)
+          </a>
+        </div>
       </div>
     </form>
   </div>

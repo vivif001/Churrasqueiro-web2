@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Churrasqueiro - Cardápio & Pedidos</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="../shared/css/global.css">
+  <link rel="stylesheet" href="cardapio.css">
+</head>
+<body class="modo-cliente">
+
+  <header class="topbar">
+    <div class="topbar-container">
+      
+      <a href="cardapio.html" class="marca-header">
+        <div class="texto-marca">
+          <span class="nome-marca">O CHURRASQUEIRO</span>
+          <span class="segmento-marca">HAMBURGUERIA ARTESANAL</span>
+        </div>
+      </a>
+
+      <nav class="nav-links apenas-funcionario">
+        <a href="cardapio.html" class="nav-item active">
+          <i class="fa-solid fa-burger"></i>
+          <span>Cardápio</span>
+        </a>
+        <a href="#" class="nav-item disabled" title="Em breve">
+          <i class="fa-solid fa-bell-concierge"></i>
+          <span>Mesas & Pedidos</span>
+        </a>
+        <a href="#" class="nav-item disabled" title="Em breve">
+          <i class="fa-solid fa-kitchen-set"></i>
+          <span>Cozinha (KDS)</span>
+        </a>
+        <a href="#" class="nav-item disabled" title="Em breve">
+          <i class="fa-solid fa-users-gear"></i>
+          <span>Equipe</span>
+        </a>
+      </nav>
+
+      <div class="header-acoes-direita">
+        
+        <button type="button" class="btn-sacola-header" id="btnAbrirSacola" title="Ver minha comanda">
+          <div class="sacola-icone-wrapper">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span class="sacola-badge-count" id="headerSacolaCount">0</span>
+          </div>
+          <div class="sacola-texto-header">
+            <span class="sacola-subtexto">Minha Comanda</span>
+            <span class="sacola-total-header" id="headerSacolaTotal">R$ 0,00</span>
+          </div>
+        </button>
+
+        <a href="../login/login.html" class="btn-acesso-funcionario apenas-cliente" title="Acesso restrito para funcionários">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Área do Funcionário</span>
+        </a>
+
+        <div class="usuario-painel apenas-funcionario">
+          <div class="usuario-avatar">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div class="usuario-detalhes">
+            <span class="usuario-nome" id="usuarioNome">Colaborador</span>
+            <span class="usuario-cargo" id="usuarioCargo">ADMIN</span>
+          </div>
+          <button type="button" class="btn-logout" id="btnLogout" title="Sair do modo funcionário">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <div class="banner-modo-gestao apenas-funcionario">
+    <div class="banner-conteudo">
+      <i class="fa-solid fa-shield-halved"></i>
+      <span>Você está conectado como <strong>Funcionário</strong> no modo de gestão do cardápio.</span>
+    </div>
+  </div>
+
+  <main class="main-content">
+    
+    <section class="hero-section">
+      <div class="hero-info">
+        <h1 class="hero-title" id="heroTitle">CARDÁPIO DA CASA</h1>
+        <p class="hero-subtitle" id="heroSubtitle">Hambúrgueres artesanais na brasa, smash burgers crocantes, acompanhamentos e bebidas frescas</p>
+      </div>
+      
+      <div class="hero-actions apenas-funcionario">
+        <button type="button" class="btn-novo-produto" id="btnAbrirModalCriar">
+          <i class="fa-solid fa-plus"></i>
+          <span>NOVO PRODUTO</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="stats-grid apenas-funcionario">
+      <div class="stat-card">
+        <div class="stat-icon icon-produtos">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <div class="stat-data">
+          <span class="stat-value" id="statTotal">0</span>
+          <span class="stat-label">Total de Itens</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-burgers">
+          <i class="fa-solid fa-burger"></i>
+        </div>
+        <div class="stat-data">
+          <span class="stat-value" id="statBurgers">0</span>
+          <span class="stat-label">Burgers & Smashes</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-disponiveis">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div class="stat-data">
+          <span class="stat-value" id="statDisponiveis">0</span>
+          <span class="stat-label">Disponíveis no Salão</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-esgotados">
+          <i class="fa-solid fa-ban"></i>
+        </div>
+        <div class="stat-data">
+          <span class="stat-value" id="statEsgotados">0</span>
+          <span class="stat-label">Pausados / Esgotados</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="filtros-container">
+      
+      <div class="controles-superiores">
+        <div class="busca-input-box">
+          <i class="fa-solid fa-magnifying-glass busca-icone"></i>
+          <input 
+            type="text" 
+            id="inputBusca" 
+            placeholder="Buscar por lanche, porção ou ingrediente (ex: costela, bacon, trufa)..." 
+            autocomplete="off"
+          />
+          <button type="button" class="busca-limpar" id="btnLimparBusca" style="display: none;" title="Limpar busca">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="selects-wrapper">
+          <div class="custom-select-box apenas-funcionario">
+            <label for="selectStatus"><i class="fa-solid fa-filter"></i></label>
+            <select id="selectStatus">
+              <option value="todos">Todos os Status</option>
+              <option value="disponivel">Somente Disponíveis</option>
+              <option value="esgotado">Somente Esgotados</option>
+            </select>
+          </div>
+
+          <div class="custom-select-box">
+            <label for="selectOrdenacao"><i class="fa-solid fa-arrow-down-short-wide"></i></label>
+            <select id="selectOrdenacao">
+              <option value="populares">Destaques da Casa</option>
+              <option value="menor_preco">Menor Preço</option>
+              <option value="maior_preco">Maior Preço</option>
+              <option value="nome_asc">Nome (A - Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="categorias-pills" id="categoriasPills">
+        <button type="button" class="pill-btn active" data-categoria="todos">
+          <i class="fa-solid fa-border-all"></i>
+          <span>Todos</span>
+          <span class="pill-badge" id="countTodos">0</span>
+        </button>
+
+        <button type="button" class="pill-btn" data-categoria="burgers">
+          <i class="fa-solid fa-burger"></i>
+          <span>Burgers Artesanais</span>
+          <span class="pill-badge" id="countBurgers">0</span>
+        </button>
+
+        <button type="button" class="pill-btn" data-categoria="smashes">
+          <i class="fa-solid fa-fire"></i>
+          <span>Smash Burgers</span>
+          <span class="pill-badge" id="countSmashes">0</span>
+        </button>
+
+        <button type="button" class="pill-btn" data-categoria="acompanhamentos">
+          <i class="fa-solid fa-bowl-food"></i>
+          <span>Acompanhamentos</span>
+          <span class="pill-badge" id="countAcompanhamentos">0</span>
+        </button>
+
+        <button type="button" class="pill-btn" data-categoria="bebidas">
+          <i class="fa-solid fa-wine-glass"></i>
+          <span>Bebidas & Chopp</span>
+          <span class="pill-badge" id="countBebidas">0</span>
+        </button>
+
+        <button type="button" class="pill-btn" data-categoria="sobremesas">
+          <i class="fa-solid fa-ice-cream"></i>
+          <span>Sobremesas</span>
+          <span class="pill-badge" id="countSobremesas">0</span>
+        </button>
+      </div>
+
+    </section>
+
+    <section class="produtos-grid" id="produtosGrid"></section>
+
+    <div class="estado-vazio" id="estadoVazio" style="display: none;">
+      <div class="estado-vazio-icone">
+        <i class="fa-solid fa-burger fa-bounce"></i>
+      </div>
+      <h3 class="estado-vazio-titulo">NENHUM PRODUTO ENCONTRADO</h3>
+      <p class="estado-vazio-texto">Não encontramos nenhum item correspondente aos filtros de busca atuais.</p>
+      <button type="button" class="btn-resetar-filtros" id="btnResetarFiltros">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span>Limpar Filtros</span>
+      </button>
+    </div>
+
+  </main>
+
+  <div class="sacola-backdrop" id="sacolaBackdrop" style="display: none;">
+    <aside class="sacola-drawer" id="sacolaDrawer">
+      
+      <div class="sacola-header">
+        <div class="sacola-titulo-box">
+          <i class="fa-solid fa-bag-shopping sacola-icone-header"></i>
+          <h2 class="sacola-titulo">SUA COMANDA</h2>
+        </div>
+        <button type="button" class="btn-fechar-sacola" id="btnFecharSacola" aria-label="Fechar comanda">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="sacola-itens-lista" id="sacolaItensLista"></div>
+
+      <div class="sacola-footer">
+        
+        <div class="sacola-mesa-box">
+          <label for="inputMesaCliente">
+            <i class="fa-solid fa-chair"></i>
+            <span>Número da Mesa / Nome:</span>
+          </label>
+          <input type="text" id="inputMesaCliente" placeholder="Ex: Mesa 04 ou Balcão" value="Mesa 01" required />
+        </div>
+
+        <div class="sacola-obs-box">
+          <label for="inputObsCliente">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Observações para a Cozinha:</span>
+          </label>
+          <input type="text" id="inputObsCliente" placeholder="Ex: Ponto da carne, sem cebola..." />
+        </div>
+
+        <div class="sacola-total-linha">
+          <span class="sacola-total-label">Total do Pedido:</span>
+          <span class="sacola-total-valor" id="sacolaTotalValor">R$ 0,00</span>
+        </div>
+
+        <button type="button" class="btn-finalizar-pedido" id="btnFinalizarPedido">
+          <i class="fa-solid fa-fire"></i>
+          <span>ENVIAR PEDIDO PARA A COZINHA</span>
+        </button>
+
+      </div>
+
+    </aside>
+  </div>
+
+  <div class="modal-backdrop" id="modalSucessoPedidoBackdrop" style="display: none;">
+    <div class="modal-container modal-container-sm" style="text-align: center;">
+      <div class="sucesso-pedido-box">
+        <div class="sucesso-icone-animado">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h2 class="modal-titulo" style="color: #34d399; margin-top: 16px;">PEDIDO ENVIADO!</h2>
+        <p class="sucesso-numero-pedido">Comanda <strong id="numeroPedidoCriado">#101</strong></p>
+        <p class="sucesso-subtexto">Seu pedido já foi encaminhado para a chapa dos nossos churrasqueiros e estará pronto em instantes.</p>
+        
+        <div class="sucesso-resumo-mesa">
+          <span id="resumoMesaConfirmada">Mesa 01</span> • <span id="resumoTotalConfirmado">R$ 0,00</span>
+        </div>
+
+        <button type="button" class="btn-modal-salvar" id="btnFecharSucessoPedido" style="width: 100%; justify-content: center; margin-top: 20px;">
+          <span>FECHAR E CONTINUAR</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalProdutoBackdrop" style="display: none;">
+    <div class="modal-container">
+      
+      <div class="modal-header">
+        <div class="modal-titulo-box">
+          <i class="fa-solid fa-fire modal-icone-titulo"></i>
+          <h2 class="modal-titulo" id="modalTitulo">CADASTRAR PRODUTO</h2>
+        </div>
+        <button type="button" class="modal-btn-fechar" id="btnFecharModal" aria-label="Fechar modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formProduto" class="modal-form">
+        <input type="hidden" id="produtoId" value="" />
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label for="produtoNome">Nome do Produto *</label>
+            <input type="text" id="produtoNome" placeholder="Ex: Blend Brasa BBQ 200g" required />
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="produtoPreco">Preço (R$) *</label>
+            <input type="number" id="produtoPreco" step="0.10" min="0" placeholder="0.00" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="produtoCategoria">Categoria *</label>
+            <select id="produtoCategoria" required>
+              <option value="burgers">Burgers Artesanais</option>
+              <option value="smashes">Smash Burgers</option>
+              <option value="acompanhamentos">Acompanhamentos & Porções</option>
+              <option value="bebidas">Bebidas & Chopp</option>
+              <option value="sobremesas">Sobremesas</option>
+            </select>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="produtoTempo">Tempo Médio (min)</label>
+            <input type="number" id="produtoTempo" min="1" max="120" value="12" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="produtoDescricao">Descrição dos Ingredientes / Modo de Preparo *</label>
+          <textarea 
+            id="produtoDescricao" 
+            rows="3" 
+            placeholder="Descreva o pão, carnes, queijos, molhos e acompanhamentos..." 
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="produtoImagem">URL da Foto do Produto</label>
+          <div class="input-com-preview">
+            <input 
+              type="url" 
+              id="produtoImagem" 
+              placeholder="https://images.unsplash.com/..." 
+            />
+          </div>
+          <small class="helper-text">Deixe em branco para usar uma foto apetitosa padrão da categoria</small>
+        </div>
+
+        <div class="preview-imagem-container">
+          <span class="preview-label">Pré-visualização da imagem:</span>
+          <div class="preview-img-box">
+            <img id="imgPreview" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=80" alt="Preview do Lanche">
+          </div>
+        </div>
+
+        <div class="form-row toggles-row">
+          <label class="toggle-control">
+            <input type="checkbox" id="produtoDisponivel" checked />
+            <span class="toggle-slider"></span>
+            <span class="toggle-text">Disponível para Venda</span>
+          </label>
+
+          <label class="toggle-control">
+            <input type="checkbox" id="produtoDestaque" />
+            <span class="toggle-slider"></span>
+            <span class="toggle-text">Item em Destaque (Chef)</span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-modal-cancelar" id="btnCancelarModal">CANCELAR</button>
+          <button type="submit" class="btn-modal-salvar" id="btnSalvarProduto">
+            <i class="fa-solid fa-check"></i>
+            <span>SALVAR PRODUTO</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalExcluirBackdrop" style="display: none;">
+    <div class="modal-container modal-container-sm">
+      <div class="modal-header">
+        <div class="modal-titulo-box">
+          <i class="fa-solid fa-triangle-exclamation modal-icone-alerta"></i>
+          <h2 class="modal-titulo">EXCLUIR PRODUTO</h2>
+        </div>
+        <button type="button" class="modal-btn-fechar" id="btnFecharModalExcluir">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-corpo-aviso">
+        <p>Tem certeza que deseja remover o produto <strong id="nomeProdutoExcluir" class="destaque-alerta"></strong> do cardápio?</p>
+        <p class="sub-aviso">Esta ação não pode ser desfeita.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-cancelar" id="btnCancelarExclusao">CANCELAR</button>
+        <button type="button" class="btn-modal-excluir-confirma" id="btnConfirmarExclusao">
+          <i class="fa-solid fa-trash-can"></i>
+          <span>EXCLUIR DEFINITIVAMENTE</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="../shared/js/auth.js"></script>
+  <script src="cardapio.service.js"></script>
+  <script src="cardapio.js"></script>
+</body>
+</html>
