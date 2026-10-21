@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Churrasqueiro - Gestão de Equipe</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="../shared/css/global.css">
+  <link rel="stylesheet" href="equipe.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-container">
+      
+      <a href="../cardapio/cardapio.html" class="marca-header" title="Voltar ao início">
+        <div class="icone-marca">
+          <i class="fa-solid fa-fire-burner"></i>
+        </div>
+        <div class="texto-marca">
+          <span class="nome-marca">O CHURRASQUEIRO</span>
+          <span class="segmento-marca">HAMBURGUERIA ARTESANAL</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="../cardapio/cardapio.html" class="nav-item">
+          <i class="fa-solid fa-burger"></i>
+          <span>Cardápio</span>
+        </a>
+        <a href="#" class="nav-item disabled" title="Em breve">
+          <i class="fa-solid fa-bell-concierge"></i>
+          <span>Mesas & Pedidos</span>
+        </a>
+        <a href="#" class="nav-item disabled" title="Em breve">
+          <i class="fa-solid fa-kitchen-set"></i>
+          <span>Cozinha (KDS)</span>
+        </a>
+        <a href="equipe.html" class="nav-item active">
+          <i class="fa-solid fa-users-gear"></i>
+          <span>Equipe</span>
+        </a>
+      </nav>
+
+      <div class="header-acoes-direita">
+        <div class="usuario-painel">
+          <div class="usuario-avatar">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div class="usuario-detalhes">
+            <span class="usuario-nome" id="usuarioNome">Administrador</span>
+            <span class="usuario-cargo" id="usuarioCargo">ADMIN</span>
+          </div>
+          <button type="button" class="btn-logout" id="btnLogout" title="Sair do sistema">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="banner-modo-gestao">
+    <div class="banner-conteudo">
+      <div class="banner-esquerda">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Módulo de Gestão de Colaboradores e Níveis de Acesso</span>
+      </div>
+      <div class="banner-status-api" id="badgeStatusApi">
+        <span class="status-dot"></span>
+        <span id="textoStatusApi">Verificando API...</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+
+    <section class="hero-section">
+      <div class="hero-info">
+        <h1 class="hero-title">
+          <i class="fa-solid fa-users-gear"></i>
+          GESTÃO DE EQUIPE
+        </h1>
+        <p class="hero-subtitle">
+          Gerencie colaboradores da hamburgueria, defina permissões por cargo operacional e mantenha o acesso seguro.
+        </p>
+      </div>
+
+      <button type="button" class="btn-novo-membro" id="btnAbrirModalCriar">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>Novo Colaborador</span>
+      </button>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card stat-total">
+        <div class="stat-icone">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-valor" id="statTotal">0</span>
+          <span class="stat-rotulo">Total de Membros</span>
+        </div>
+      </div>
+
+      <div class="stat-card stat-admin">
+        <div class="stat-icone">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-valor" id="statAdmin">0</span>
+          <span class="stat-rotulo">Administradores</span>
+        </div>
+      </div>
+
+      <div class="stat-card stat-garcom">
+        <div class="stat-icone">
+          <i class="fa-solid fa-bell-concierge"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-valor" id="statGarcom">0</span>
+          <span class="stat-rotulo">Garçons & Salão</span>
+        </div>
+      </div>
+
+      <div class="stat-card stat-cozinha">
+        <div class="stat-icone">
+          <i class="fa-solid fa-fire-burner"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-valor" id="statCozinha">0</span>
+          <span class="stat-rotulo">Cozinha & Chapa</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="filtros-container">
+      <div class="filtros-linha-topo">
+        
+        <div class="busca-wrapper">
+          <i class="fa-solid fa-magnifying-glass busca-icone"></i>
+          <input 
+            type="text" 
+            class="busca-input" 
+            id="inputBusca" 
+            placeholder="Pesquisar por nome ou e-mail..."
+            autocomplete="off"
+          >
+          <button type="button" class="btn-limpar-busca" id="btnLimparBusca" title="Limpar pesquisa">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="filtros-controles">
+          <select class="select-filtro" id="selectStatus">
+            <option value="todos">Status: Todos</option>
+            <option value="ativo">Somente Ativos</option>
+            <option value="inativo">Somente Inativos</option>
+          </select>
+
+          <select class="select-filtro" id="selectOrdenacao">
+            <option value="nome-asc">Nome (A - Z)</option>
+            <option value="nome-desc">Nome (Z - A)</option>
+            <option value="cargo">Cargo</option>
+            <option value="recentes">Mais Recentes</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="pills-cargos">
+        <button type="button" class="pill-cargo active" data-cargo="todos">
+          <span>Todos</span>
+          <span class="pill-count" id="countTodos">0</span>
+        </button>
+        <button type="button" class="pill-cargo" data-cargo="ADMIN">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Administradores</span>
+          <span class="pill-count" id="countAdmin">0</span>
+        </button>
+        <button type="button" class="pill-cargo" data-cargo="GARCOM">
+          <i class="fa-solid fa-bell-concierge"></i>
+          <span>Garçons</span>
+          <span class="pill-count" id="countGarcom">0</span>
+        </button>
+        <button type="button" class="pill-cargo" data-cargo="COZINHEIRO">
+          <i class="fa-solid fa-fire-burner"></i>
+          <span>Cozinheiros</span>
+          <span class="pill-count" id="countCozinha">0</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="equipe-grid" id="equipeGrid"></section>
+
+    <div class="estado-vazio" id="estadoVazio" style="display: none;">
+      <div class="icone-vazio">
+        <i class="fa-solid fa-user-slash"></i>
+      </div>
+      <h3 class="titulo-vazio">Nenhum colaborador encontrado</h3>
+      <p class="desc-vazio">Não encontramos colaboradores com os filtros selecionados. Tente ajustar a busca ou redefinir os filtros.</p>
+      <button type="button" class="btn-resetar-filtros" id="btnResetarFiltros">
+        <i class="fa-solid fa-rotate-left"></i> Limpar Filtros
+      </button>
+    </div>
+
+  </main>
+
+  <div class="modal-backdrop" id="modalMembroBackdrop">
+    <div class="modal-janela">
+      
+      <div class="modal-header">
+        <div class="modal-titulo-wrapper">
+          <div class="modal-icone-wrapper">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <h2 class="modal-titulo" id="modalTitulo">Novo Colaborador</h2>
+        </div>
+        <button type="button" class="btn-fechar-modal" id="btnFecharModal" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formMembro">
+        <div class="modal-corpo">
+          <input type="hidden" id="membroId">
+
+          <div class="form-erro-alerta" id="formErroAlerta">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span id="formErroTexto">Preencha todos os campos obrigatórios.</span>
+          </div>
+
+          <div class="form-grupo">
+            <label class="form-label" for="membroNome">
+              Nome Completo <span class="obrigatorio">*</span>
+            </label>
+            <div class="form-input-container">
+              <i class="fa-solid fa-user form-input-icone"></i>
+              <input 
+                type="text" 
+                id="membroNome" 
+                class="form-input" 
+                placeholder="Ex: Carlos Eduardo de Souza" 
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-grupo">
+            <label class="form-label" for="membroEmail">
+              E-mail de Acesso <span class="obrigatorio">*</span>
+            </label>
+            <div class="form-input-container">
+              <i class="fa-solid fa-envelope form-input-icone"></i>
+              <input 
+                type="email" 
+                id="membroEmail" 
+                class="form-input" 
+                placeholder="Ex: carlos@hamburgueria.com" 
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-grupo">
+            <label class="form-label" for="membroCargo">
+              Função / Cargo Operacional <span class="obrigatorio">*</span>
+            </label>
+            <div class="form-input-container">
+              <i class="fa-solid fa-id-badge form-input-icone"></i>
+              <select id="membroCargo" class="form-select" required>
+                <option value="" disabled selected>Selecione um cargo...</option>
+                <option value="ADMIN">ADMIN - Administrador & Gestão</option>
+                <option value="GARCOM">GARÇOM - Atendimento & Salão</option>
+                <option value="COZINHEIRO">COZINHEIRO - Cozinha & Chapa</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grupo">
+            <label class="form-label" for="membroSenha">
+              Senha de Acesso <span class="obrigatorio" id="senhaObrigatorioMark">*</span>
+            </label>
+            <div class="form-input-container">
+              <i class="fa-solid fa-lock form-input-icone"></i>
+              <input 
+                type="password" 
+                id="membroSenha" 
+                class="form-input" 
+                placeholder="Mínimo 4 caracteres"
+              >
+              <button type="button" class="btn-toggle-senha" id="btnToggleSenha" title="Mostrar/ocultar senha">
+                <i class="fa-regular fa-eye" id="iconeOlhoSenha"></i>
+              </button>
+            </div>
+            <p class="form-dica" id="senhaDica">Na edição, deixe em branco caso queira manter a senha atual.</p>
+          </div>
+
+          <div class="form-grupo">
+            <label class="switch-wrapper">
+              <div class="switch-texto">
+                <span class="switch-titulo">Colaborador Ativo</span>
+                <span class="switch-desc">Permite o login e uso das funções do sistema</span>
+              </div>
+              <input type="checkbox" id="membroAtivo" class="switch-input" checked>
+            </label>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancelar" id="btnCancelarModal">Cancelar</button>
+          <button type="submit" class="btn-salvar" id="btnSalvarMembro">
+            <i class="fa-solid fa-check"></i>
+            <span>Salvar Colaborador</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalDeleteBackdrop">
+    <div class="modal-janela modal-janela-delete">
+      <div class="modal-delete-alerta">
+        <div class="delete-icone-aviso">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3 class="delete-titulo">Confirmar Exclusão</h3>
+        <p class="delete-texto">
+          Tem certeza de que deseja remover o colaborador <strong id="deleteNomeFuncionario" class="delete-nome-destaque">---</strong>? Essa ação é permanente.
+        </p>
+        <div class="modal-delete-acoes">
+          <button type="button" class="btn-cancelar" id="btnCancelarDelete">Não, cancelar</button>
+          <button type="button" class="btn-confirmar-delete" id="btnConfirmarDelete">
+            <i class="fa-solid fa-trash-can"></i>
+            <span>Sim, excluir</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="../shared/js/auth.js"></script>
+  <script src="equipe.service.js"></script>
+  <script src="equipe.js"></script>
+</body>
+</html>
