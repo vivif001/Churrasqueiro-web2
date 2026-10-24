@@ -1,0 +1,317 @@
+body {
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(18, 18, 20, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid #1f1f23;
+    padding: 0 24px;
+}
+
+.topbar-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.marca-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.icone-marca {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary-red), #991b1b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.35);
+}
+
+.texto-marca {
+    display: flex;
+    flex-direction: column;
+}
+
+.nome-marca {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.segmento-marca {
+    font-size: 0.65rem;
+    color: var(--primary-red);
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+.btn-voltar-cardapio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: var(--text-secondary);
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-voltar-cardapio:hover {
+    color: #ffffff;
+    border-color: var(--primary-red);
+}
+
+.main-content {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 20px;
+    flex: 1;
+}
+
+.cartao-status-cliente {
+    background-color: var(--card-bg);
+    border: 1px solid #1f1f23;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.cabecalho-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1f1f23;
+    padding-bottom: 20px;
+}
+
+.label-comanda {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.numero-comanda {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--primary-red);
+    letter-spacing: 1.5px;
+    line-height: 1;
+}
+
+.badge-mesa {
+    background-color: #18181b;
+    border: 1px solid #27272a;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge-mesa i {
+    color: var(--primary-red);
+}
+
+.linha-tempo-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 10px 0;
+}
+
+.linha-progresso-fundo {
+    position: absolute;
+    top: 28px;
+    left: 50px;
+    right: 50px;
+    height: 4px;
+    background-color: #27272a;
+    z-index: 1;
+}
+
+.linha-progresso-preenchimento {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #f59e0b, var(--primary-red), #10b981);
+    transition: width 0.4s ease;
+}
+
+.etapa-status {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+.etapa-status.ativa {
+    opacity: 1;
+}
+
+.icone-etapa {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #18181b;
+    border: 2px solid #27272a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+.etapa-status.ativa .icone-etapa {
+    border-color: var(--primary-red);
+    background-color: var(--primary-red);
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+}
+
+.etapa-status.concluida .icone-etapa {
+    border-color: #10b981;
+    background-color: #10b981;
+}
+
+.rotulo-etapa {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.caixa-mensagem-status {
+    background-color: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.icone-mensagem-status {
+    font-size: 2rem;
+    color: var(--primary-red);
+}
+
+.titulo-mensagem-status {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.subtitulo-mensagem-status {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.titulo-secao-resumo {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.lista-itens-cliente {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-cliente-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #18181b;
+    border-radius: 8px;
+    border: 1px solid #27272a;
+}
+
+.item-qtd-badge {
+    font-family: var(--font-heading);
+    color: var(--primary-red);
+    font-size: 1.1rem;
+    margin-right: 8px;
+}
+
+.item-nome-texto {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.item-preco-texto {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    color: #e4e4e7;
+}
+
+.rodape-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #1f1f23;
+    padding-top: 18px;
+}
+
+.label-total {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.valor-total {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--primary-red);
+    letter-spacing: 1px;
+}
+
+@media (max-width: 600px) {
+    .cartao-status-cliente { padding: 20px; }
+    .numero-comanda { font-size: 2rem; }
+    .rotulo-etapa { font-size: 0.75rem; }
+    .linha-tempo-wrapper { padding: 0; }
+}
