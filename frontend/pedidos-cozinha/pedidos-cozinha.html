@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Churrasqueiro - Painel da Cozinha (KDS)</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../shared/css/global.css">
+    <link rel="stylesheet" href="pedidos-cozinha.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-container">
+        <div class="marca-header">
+            <div class="texto-marca">
+                <span class="nome-marca">O CHURRASQUEIRO</span>
+                <span class="segmento-marca">PAINEL DA COZINHA & PEDIDOS (KDS)</span>
+            </div>
+        </div>
+
+        <div class="header-acoes-direita">
+            <button type="button" class="btn-atualizar" id="btnAtualizarPedidos" title="Atualizar pedidos">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Atualizar</span>
+            </button>
+
+            <a href="../cardapio/cardapio.html" class="btn-acesso-funcionario">
+                <i class="fa-solid fa-burger"></i>
+                <span>Ir ao Cardápio</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+
+    <section class="painel-header-info">
+        <div class="status-resumo-grid">
+            <div class="card-status-resumo resumo-recebidos">
+                <span class="resumo-qtd" id="countRecebidos">0</span>
+                <span class="resumo-label">Recebidos (Aguardando)</span>
+            </div>
+            <div class="card-status-resumo resumo-preparo">
+                <span class="resumo-qtd" id="countEmPreparo">0</span>
+                <span class="resumo-label">Na Chapa (Em Preparo)</span>
+            </div>
+            <div class="card-status-resumo resumo-prontos">
+                <span class="resumo-qtd" id="countProntos">0</span>
+                <span class="resumo-label">Prontos para Envio</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="pedidos-cozinha-grid" id="pedidosContainer"></section>
+
+    <div class="estado-vazio" id="estadoVazioCozinha" style="display: none;">
+        <i class="fa-solid fa-bell-concierge estado-vazio-icone"></i>
+        <h3 class="estado-vazio-titulo">NENHUM PEDIDO PENDENTE</h3>
+        <p class="estado-vazio-texto">A chapa está limpa! Novos pedidos realizados no salão aparecerão automaticamente aqui.</p>
+    </div>
+
+</main>
+
+<script src="pedidos-cozinha.js"></script>
+</body>
+</html>
