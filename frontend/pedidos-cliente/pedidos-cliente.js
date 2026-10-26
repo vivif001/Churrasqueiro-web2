@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const seletorComandasBox = document.getElementById('seletorComandasBox');
     const selectComandaAtiva = document.getElementById('selectComandaAtiva');
 
-    // Identifica se há funcionário logado
     const usuarioLogado = typeof getUsuarioLogado === 'function' ? getUsuarioLogado() : null;
     const isStaff = Boolean(usuarioLogado && usuarioLogado.cargo);
 
@@ -42,21 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function obterIdPedidoAlvo() {
-        // 1. Query parameter ?id=123
+
         const params = new URLSearchParams(window.location.search);
         const paramId = params.get('id');
         if (paramId) return Number(paramId);
 
-        // 2. Seletor selecionado manualmente na tela
         if (selectComandaAtiva && selectComandaAtiva.value) {
             return Number(selectComandaAtiva.value);
         }
 
-        // 3. Último pedido criado nesta sessão/navegador
         const ultimoId = localStorage.getItem('churrasqueiro_ultimo_pedido_id');
         if (ultimoId) return Number(ultimoId);
 
-        // 4. Primeiro pedido da lista (mais recente)
         const pedidos = obterTodosPedidos();
         return pedidos.length > 0 ? pedidos[0].id : null;
     }
@@ -83,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (pedidos.length > 1 || isStaff) {
             seletorComandasBox.style.display = 'block';
-            
+
             const currentSelected = pedidoAtual ? String(pedidoAtual.id) : '';
             const optionsHtml = pedidos.map(p => `
                 <option value="${p.id}" ${String(p.id) === currentSelected ? 'selected' : ''}>
@@ -191,8 +187,19 @@ document.addEventListener('DOMContentLoaded', () => {
         valorTotalCliente.textContent = formatarMoeda(totalCalculado);
     }
 
+    async function sincronizarBackend() {
+        if (typeof pedidosClienteService !== 'undefined' && pedidosClienteService.obterPedidos) {
+            await pedidosClienteService.obterPedidos();
+        }
+    }
+
+    async function atualizarTudo() {
+        await sincronizarBackend();
+        renderizarPedido();
+    }
+
     window.addEventListener('storage', renderizarPedido);
 
-    renderizarPedido();
-    setInterval(renderizarPedido, 3000);
+    atualizarTudo();
+    setInterval(atualizarTudo, 3000);
 });

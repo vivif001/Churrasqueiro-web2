@@ -125,13 +125,30 @@ class CardapioService {
     }
   }
 
+  _normalizarItem(item) {
+    if (!item) return null;
+    return {
+      ...item,
+      id: Number(item.id),
+      categoria: (item.categoria || 'burgers').toString().toLowerCase(),
+      preco: Number(item.preco || 0),
+      disponivel: item.disponivel !== undefined ? Boolean(item.disponivel) : true,
+      destaque: Boolean(item.destaque)
+    };
+  }
+
   _obterTodosDoStorage() {
     try {
       const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    } catch (e) {
-      return [];
-    }
+      if (data) {
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map(this._normalizarItem);
+        }
+      }
+    } catch (_) {}
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ITENS_INICIAIS));
+    return ITENS_INICIAIS.map(this._normalizarItem);
   }
 
   _salvarTodosNoStorage(itens) {
@@ -141,17 +158,18 @@ class CardapioService {
   async listar(filtros = {}) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1200);
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
       const res = await fetch(CARDAPIO_API_URL, { signal: controller.signal });
       clearTimeout(timeoutId);
       if (res.ok) {
         const dadosBack = await res.json();
         if (Array.isArray(dadosBack) && dadosBack.length > 0) {
-          return this._aplicarFiltros(dadosBack, filtros);
+          const itensNormalizados = dadosBack.map(item => this._normalizarItem(item));
+          this._salvarTodosNoStorage(itensNormalizados);
+          return this._aplicarFiltros(itensNormalizados, filtros);
         }
       }
-    } catch (_) {
-    }
+    } catch (_) {}
 
     const itens = this._obterTodosDoStorage();
     return this._aplicarFiltros(itens, filtros);
@@ -161,12 +179,13 @@ class CardapioService {
     let filtrados = [...itens];
 
     if (categoria && categoria !== 'todos') {
-      filtrados = filtrados.filter(item => item.categoria === categoria);
+      const catBusca = categoria.toString().toLowerCase();
+      filtrados = filtrados.filter(item => (item.categoria || '').toString().toLowerCase() === catBusca);
     }
 
     if (status && status !== 'todos') {
       const disponivel = status === 'disponivel';
-      filtrados = filtrados.filter(item => item.disponivel === disponivel);
+      filtrados = filtrados.filter(item => Boolean(item.disponivel) === disponivel);
     }
 
     if (busca && busca.trim() !== '') {

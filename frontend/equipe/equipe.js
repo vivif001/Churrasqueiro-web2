@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Verifica autenticação
+
     if (typeof getUsuarioLogado === 'function') {
         const usuario = getUsuarioLogado();
         if (!usuario) {
-            // Se não logado, cria um padrão ou redireciona
+
             const adminPadrao = {
                 id: 1,
                 nome: 'Administrador Chefe',
@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Elementos do DOM
     const statTotal = document.getElementById('statTotal');
     const statAdmin = document.getElementById('statAdmin');
     const statGarcom = document.getElementById('statGarcom');
@@ -187,7 +186,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Modal Colaborador (Cadastrar / Editar)
     function abrirModalNovo() {
         formColaborador.reset();
         inputId.value = '';
@@ -264,7 +262,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Modal Excluir
     function abrirModalExcluir(colaborador) {
         idParaExcluir = colaborador.id;
         nomeExcluir.textContent = `"${colaborador.nome}"`;
@@ -293,7 +290,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Filtros e busca
     inputBusca.addEventListener('input', renderizarTabela);
 
     botoesFiltro.forEach(btn => {

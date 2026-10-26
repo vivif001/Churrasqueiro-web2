@@ -23,18 +23,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function salvarPedidos(pedidos) {
-        localStorage.setItem(PEDIDOS_KEY, JSON.stringify(pedidos));
-        window.dispatchEvent(new Event('storage'));
+        if (typeof pedidosCozinhaService !== 'undefined' && pedidosCozinhaService.salvarPedidos) {
+            pedidosCozinhaService.salvarPedidos(pedidos);
+        } else {
+            localStorage.setItem(PEDIDOS_KEY, JSON.stringify(pedidos));
+            window.dispatchEvent(new Event('storage'));
+        }
         renderizarPainel();
     }
 
-    function alterarStatusPedido(pedidoId, novoStatus) {
-        const pedidos = obterPedidos();
-        const index = pedidos.findIndex(p => p.id === Number(pedidoId));
-
-        if (index > -1) {
-            pedidos[index].status = novoStatus;
-            salvarPedidos(pedidos);
+    async function alterarStatusPedido(pedidoId, novoStatus) {
+        if (typeof pedidosCozinhaService !== 'undefined' && pedidosCozinhaService.alterarStatus) {
+            await pedidosCozinhaService.alterarStatus(pedidoId, novoStatus);
+            renderizarPainel();
+        } else {
+            const pedidos = obterPedidos();
+            const index = pedidos.findIndex(p => p.id === Number(pedidoId));
+            if (index > -1) {
+                pedidos[index].status = novoStatus;
+                salvarPedidos(pedidos);
+            }
         }
     }
 
@@ -50,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         countEmPreparo.textContent = preparo;
         countProntos.textContent = prontos;
 
-        // Na chapa da cozinha, exibimos pedidos em andamento
         const pedidosAtivos = todosPedidos.filter(p => p.status !== 'ENTREGUE');
 
         if (pedidosAtivos.length === 0) {
@@ -134,9 +141,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    btnAtualizar.addEventListener('click', renderizarPainel);
+    async function sincronizarEAtualizar() {
+        if (typeof pedidosCozinhaService !== 'undefined' && pedidosCozinhaService.obterPedidos) {
+            await pedidosCozinhaService.obterPedidos();
+        }
+        renderizarPainel();
+    }
+
+    btnAtualizar.addEventListener('click', sincronizarEAtualizar);
     window.addEventListener('storage', renderizarPainel);
 
-    renderizarPainel();
-    setInterval(renderizarPainel, 3000);
+    sincronizarEAtualizar();
+    setInterval(sincronizarEAtualizar, 3000);
 });

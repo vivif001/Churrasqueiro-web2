@@ -239,14 +239,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  btnFinalizarPedido.addEventListener('click', () => {
+  btnFinalizarPedido.addEventListener('click', async () => {
     const sacola = obterSacola();
     if (sacola.length === 0) return;
 
     const mesa = (inputMesaCliente.value || 'Mesa 01').trim();
     const observacoes = (inputObsCliente.value || '').trim();
     const total = sacola.reduce((acc, cur) => acc + (cur.preco * cur.quantidade), 0);
-    const numero = Math.floor(100 + Math.random() * 900);
+    let numero = Math.floor(100 + Math.random() * 900);
+
+    const payloadBackend = {
+      mesa,
+      observacoes,
+      total,
+      itens: sacola.map(item => ({
+        nome: item.nome,
+        quantidade: item.quantidade,
+        preco: item.preco
+      }))
+    };
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const res = await fetch('http://localhost:8083/api/pedidos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payloadBackend),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      if (res.ok) {
+        const criado = await res.json();
+        if (criado && criado.id) {
+          numero = criado.id;
+        }
+      }
+    } catch (_) {}
 
     const novoPedido = {
       id: numero,
@@ -280,28 +309,41 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function atualizarTela() {
-    if (isFuncionario) {
-      await carregarEstatisticas();
-    }
+    await carregarEstatisticas();
     await renderizarGridProdutos();
     atualizarCabecalhoSacola();
   }
 
   async function carregarEstatisticas() {
-    const stats = await cardapioService.obterEstatisticas();
-    
-    document.getElementById('statTotal').textContent = stats.total;
-    document.getElementById('statBurgers').textContent = stats.burgers;
-    document.getElementById('statDisponiveis').textContent = stats.disponiveis;
-    document.getElementById('statEsgotados').textContent = stats.esgotados;
+    try {
+      const todosItens = await cardapioService.listar({ status: 'todos' });
+      const elCountTodos = document.getElementById('countTodos');
+      const elCountBurgers = document.getElementById('countBurgers');
+      const elCountSmashes = document.getElementById('countSmashes');
+      const elCountAcomp = document.getElementById('countAcompanhamentos');
+      const elCountBebidas = document.getElementById('countBebidas');
+      const elCountSobremesas = document.getElementById('countSobremesas');
 
-    const todosItens = await cardapioService.listar();
-    document.getElementById('countTodos').textContent = todosItens.length;
-    document.getElementById('countBurgers').textContent = todosItens.filter(i => i.categoria === 'burgers').length;
-    document.getElementById('countSmashes').textContent = todosItens.filter(i => i.categoria === 'smashes').length;
-    document.getElementById('countAcompanhamentos').textContent = todosItens.filter(i => i.categoria === 'acompanhamentos').length;
-    document.getElementById('countBebidas').textContent = todosItens.filter(i => i.categoria === 'bebidas').length;
-    document.getElementById('countSobremesas').textContent = todosItens.filter(i => i.categoria === 'sobremesas').length;
+      if (elCountTodos) elCountTodos.textContent = todosItens.length;
+      if (elCountBurgers) elCountBurgers.textContent = todosItens.filter(i => (i.categoria || '').toLowerCase() === 'burgers').length;
+      if (elCountSmashes) elCountSmashes.textContent = todosItens.filter(i => (i.categoria || '').toLowerCase() === 'smashes').length;
+      if (elCountAcomp) elCountAcomp.textContent = todosItens.filter(i => (i.categoria || '').toLowerCase() === 'acompanhamentos').length;
+      if (elCountBebidas) elCountBebidas.textContent = todosItens.filter(i => (i.categoria || '').toLowerCase() === 'bebidas').length;
+      if (elCountSobremesas) elCountSobremesas.textContent = todosItens.filter(i => (i.categoria || '').toLowerCase() === 'sobremesas').length;
+
+      if (isFuncionario) {
+        const stats = await cardapioService.obterEstatisticas();
+        const statTotal = document.getElementById('statTotal');
+        const statBurgers = document.getElementById('statBurgers');
+        const statDisponiveis = document.getElementById('statDisponiveis');
+        const statEsgotados = document.getElementById('statEsgotados');
+
+        if (statTotal) statTotal.textContent = stats.total;
+        if (statBurgers) statBurgers.textContent = stats.burgers;
+        if (statDisponiveis) statDisponiveis.textContent = stats.disponiveis;
+        if (statEsgotados) statEsgotados.textContent = stats.esgotados;
+      }
+    } catch (_) {}
   }
 
   async function renderizarGridProdutos() {
@@ -335,8 +377,9 @@ document.addEventListener('DOMContentLoaded', () => {
     card.className = `produto-card ${!produto.disponivel ? 'esgotado' : ''}`;
     card.id = `card-produto-${produto.id}`;
 
-    const nomeCat = NOMES_CATEGORIAS[produto.categoria] || produto.categoria;
-    const imagemSrc = produto.imagem || IMAGENS_PADRAO[produto.categoria] || IMAGENS_PADRAO.burgers;
+    const catKey = (produto.categoria || 'burgers').toString().toLowerCase();
+    const nomeCat = NOMES_CATEGORIAS[catKey] || produto.categoria;
+    const imagemSrc = produto.imagem || IMAGENS_PADRAO[catKey] || IMAGENS_PADRAO.burgers;
 
     card.innerHTML = `
       <div class="card-thumb-wrapper">
@@ -378,9 +421,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <div class="card-acoes-wrapper">
-          <button 
-            type="button" 
-            class="btn-card-adicionar apenas-cliente" 
+          <button
+            type="button"
+            class="btn-card-adicionar apenas-cliente"
             ${!produto.disponivel ? 'disabled' : ''}
           >
             <i class="fa-solid ${produto.disponivel ? 'fa-plus' : 'fa-ban'}"></i>
@@ -388,30 +431,30 @@ document.addEventListener('DOMContentLoaded', () => {
           </button>
 
           <div class="card-acoes-funcionario apenas-funcionario">
-            <button 
-              type="button" 
-              class="btn-card-toggle ${produto.disponivel ? 'ativo' : 'pausado'}" 
-              data-id="${produto.id}" 
+            <button
+              type="button"
+              class="btn-card-toggle ${produto.disponivel ? 'ativo' : 'pausado'}"
+              data-id="${produto.id}"
               title="${produto.disponivel ? 'Pausar venda deste item' : 'Reativar item no salão'}"
             >
               <i class="fa-solid ${produto.disponivel ? 'fa-pause' : 'fa-play'}"></i>
               <span>${produto.disponivel ? 'Pausar Venda' : 'Ativar Venda'}</span>
             </button>
 
-            <button 
-              type="button" 
-              class="btn-card-acao btn-editar" 
-              data-id="${produto.id}" 
+            <button
+              type="button"
+              class="btn-card-acao btn-editar"
+              data-id="${produto.id}"
               title="Editar produto"
             >
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
 
-            <button 
-              type="button" 
-              class="btn-card-acao btn-excluir" 
-              data-id="${produto.id}" 
-              data-nome="${produto.nome}" 
+            <button
+              type="button"
+              class="btn-card-acao btn-excluir"
+              data-id="${produto.id}"
+              data-nome="${produto.nome}"
               title="Excluir produto"
             >
               <i class="fa-solid fa-trash-can"></i>
@@ -651,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${tipo}`;
-    
+
     const icone = tipo === 'sucesso' ? 'fa-circle-check' : 'fa-triangle-exclamation';
     toast.innerHTML = `
       <i class="fa-solid ${icone}"></i>
