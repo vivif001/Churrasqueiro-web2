@@ -20,18 +20,61 @@
         <a href="../cardapio/cardapio.html" class="marca-header">
             <div class="texto-marca">
                 <span class="nome-marca">O CHURRASQUEIRO</span>
-                <span class="segmento-marca">ACOMPANHAR PEDIDO</span>
+                <span class="segmento-marca">MESAS & PEDIDOS</span>
             </div>
         </a>
 
-        <a href="../cardapio/cardapio.html" class="btn-voltar-cardapio">
-            <i class="fa-solid fa-utensils"></i>
-            <span>Voltar ao Cardápio</span>
-        </a>
+        <nav class="nav-links apenas-funcionario" id="staffNav" style="display: none;">
+            <a href="../cardapio/cardapio.html" class="nav-item">
+                <i class="fa-solid fa-burger"></i>
+                <span>Cardápio</span>
+            </a>
+            <a href="pedidos-cliente.html" class="nav-item active">
+                <i class="fa-solid fa-bell-concierge"></i>
+                <span>Mesas & Pedidos</span>
+            </a>
+            <a href="../pedidos-cozinha/pedidos-cozinha.html" class="nav-item">
+                <i class="fa-solid fa-kitchen-set"></i>
+                <span>Cozinha (KDS)</span>
+            </a>
+            <a href="../equipe/equipe.html" class="nav-item">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>Equipe</span>
+            </a>
+        </nav>
+
+        <div class="header-acoes-direita" style="display: flex; align-items: center; gap: 12px;">
+            <a href="../cardapio/cardapio.html" class="btn-voltar-cardapio" id="btnVoltarCardapio">
+                <i class="fa-solid fa-utensils"></i>
+                <span>Ir ao Cardápio</span>
+            </a>
+
+            <div class="usuario-painel apenas-funcionario" id="staffUserPanel" style="display: none;">
+                <div class="usuario-avatar">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <div class="usuario-detalhes">
+                    <span class="usuario-nome" id="usuarioNome">Colaborador</span>
+                    <span class="usuario-cargo" id="usuarioCargo">STAFF</span>
+                </div>
+                <button type="button" class="btn-logout" id="btnLogout" title="Sair">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </div>
     </div>
 </header>
 
 <main class="main-content">
+    <!-- Seletor de Mesas e Comandas -->
+    <div class="seletor-comandas-box" id="seletorComandasBox" style="margin-bottom: 20px; display: none;">
+        <label for="selectComandaAtiva" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; display: block; font-weight: 600;">
+            <i class="fa-solid fa-list-check" style="color: var(--primary-red); margin-right: 6px;"></i>
+            Selecione a Comanda / Mesa para Acompanhar:
+        </label>
+        <select id="selectComandaAtiva" style="width: 100%; max-width: 400px; padding: 10px 14px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; color: #fff; font-size: 0.95rem; cursor: pointer; outline: none;"></select>
+    </div>
+
     <div class="cartao-status-cliente">
 
         <div class="cabecalho-pedido">
@@ -61,14 +104,21 @@
                 <div class="icone-etapa">
                     <i class="fa-solid fa-fire-burner"></i>
                 </div>
-                <span class="rotulo-etapa">Em preparo</span>
+                <span class="rotulo-etapa">Na Chapa</span>
             </div>
 
             <div class="etapa-status" id="etapaPronto">
                 <div class="icone-etapa">
                     <i class="fa-solid fa-bell-concierge"></i>
                 </div>
-                <span class="rotulo-etapa">Pronto!</span>
+                <span class="rotulo-etapa">Pronto</span>
+            </div>
+
+            <div class="etapa-status" id="etapaEntregue">
+                <div class="icone-etapa">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <span class="rotulo-etapa">Entregue</span>
             </div>
         </div>
 
@@ -93,6 +143,8 @@
     </div>
 </main>
 
+<script src="../shared/js/auth.js"></script>
+<script src="pedidos-cliente-service.js"></script>
 <script src="pedidos-cliente.js"></script>
 </body>
 </html>

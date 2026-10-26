@@ -262,6 +262,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const historico = JSON.parse(localStorage.getItem('churrasqueiro_pedidos') || '[]');
       historico.unshift(novoPedido);
       localStorage.setItem('churrasqueiro_pedidos', JSON.stringify(historico));
+      localStorage.setItem('churrasqueiro_ultimo_pedido_id', String(numero));
+      window.dispatchEvent(new Event('storage'));
     } catch (_) {}
 
     salvarSacola([]);

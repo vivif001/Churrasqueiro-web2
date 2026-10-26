@@ -30,15 +30,15 @@
           <i class="fa-solid fa-burger"></i>
           <span>Cardápio</span>
         </a>
-        <a href="#" class="nav-item disabled" title="Em breve">
+        <a href="../pedidos-cliente/pedidos-cliente.html" class="nav-item" title="Mesas & Acompanhamento de Pedidos">
           <i class="fa-solid fa-bell-concierge"></i>
           <span>Mesas & Pedidos</span>
         </a>
-        <a href="#" class="nav-item disabled" title="Em breve">
+        <a href="../pedidos-cozinha/pedidos-cozinha.html" class="nav-item" title="Painel da Cozinha (KDS)">
           <i class="fa-solid fa-kitchen-set"></i>
           <span>Cozinha (KDS)</span>
         </a>
-        <a href="#" class="nav-item disabled" title="Em breve">
+        <a href="../equipe/equipe.html" class="nav-item" title="Gestão da Equipe">
           <i class="fa-solid fa-users-gear"></i>
           <span>Equipe</span>
         </a>
@@ -301,9 +301,15 @@
           <span id="resumoMesaConfirmada">Mesa 01</span> • <span id="resumoTotalConfirmado">R$ 0,00</span>
         </div>
 
-        <button type="button" class="btn-modal-salvar" id="btnFecharSucessoPedido" style="width: 100%; justify-content: center; margin-top: 20px;">
-          <span>FECHAR E CONTINUAR</span>
-        </button>
+        <div style="display: flex; gap: 12px; margin-top: 22px;">
+          <a href="../pedidos-cliente/pedidos-cliente.html" class="btn-modal-salvar" style="flex: 1; justify-content: center; text-decoration: none; background: #27272a; border: 1px solid #3f3f46;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>ACOMPANHAR PEDIDO</span>
+          </a>
+          <button type="button" class="btn-modal-salvar" id="btnFecharSucessoPedido" style="flex: 1; justify-content: center;">
+            <span>FECHAR</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

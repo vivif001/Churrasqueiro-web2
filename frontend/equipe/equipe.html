@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Churrasqueiro - Gestão de Equipe</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../shared/css/global.css">
+    <link rel="stylesheet" href="equipe.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-container">
+        <a href="../cardapio/cardapio.html" class="marca-header">
+            <div class="texto-marca">
+                <span class="nome-marca">O CHURRASQUEIRO</span>
+                <span class="segmento-marca">GESTÃO DE EQUIPE</span>
+            </div>
+        </a>
+
+        <nav class="nav-links">
+            <a href="../cardapio/cardapio.html" class="nav-item">
+                <i class="fa-solid fa-burger"></i>
+                <span>Cardápio</span>
+            </a>
+            <a href="../pedidos-cliente/pedidos-cliente.html" class="nav-item">
+                <i class="fa-solid fa-bell-concierge"></i>
+                <span>Mesas & Pedidos</span>
+            </a>
+            <a href="../pedidos-cozinha/pedidos-cozinha.html" class="nav-item">
+                <i class="fa-solid fa-kitchen-set"></i>
+                <span>Cozinha (KDS)</span>
+            </a>
+            <a href="equipe.html" class="nav-item active">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>Equipe</span>
+            </a>
+        </nav>
+
+        <div class="header-acoes-direita">
+            <div class="usuario-painel">
+                <div class="usuario-avatar">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div class="usuario-detalhes">
+                    <span class="usuario-nome" id="usuarioNome">Administrador</span>
+                    <span class="usuario-cargo" id="usuarioCargo">ADMIN</span>
+                </div>
+                <button type="button" class="btn-logout" id="btnLogout" title="Sair">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+
+    <section class="equipe-hero">
+        <div>
+            <h1 class="hero-titulo">GESTÃO DE EQUIPE</h1>
+            <p class="hero-subtitulo">Gerencie os acessos, cargos e permissões dos funcionários e operadores da hamburgueria.</p>
+        </div>
+        <button type="button" class="btn-primary" id="btnNovoColaborador">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>NOVO COLABORADOR</span>
+        </button>
+    </section>
+
+    <!-- Indicadores / Cards de Estatísticas -->
+    <section class="stats-grid">
+        <div class="card-stat">
+            <div class="stat-icone total">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-valor" id="statTotal">0</span>
+                <span class="stat-rotulo">Total de Colaboradores</span>
+            </div>
+        </div>
+
+        <div class="card-stat">
+            <div class="stat-icone admin">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-valor" id="statAdmin">0</span>
+                <span class="stat-rotulo">Administradores</span>
+            </div>
+        </div>
+
+        <div class="card-stat">
+            <div class="stat-icone garcom">
+                <i class="fa-solid fa-bell-concierge"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-valor" id="statGarcom">0</span>
+                <span class="stat-rotulo">Garçons & Salão</span>
+            </div>
+        </div>
+
+        <div class="card-stat">
+            <div class="stat-icone cozinheiro">
+                <i class="fa-solid fa-kitchen-set"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-valor" id="statCozinheiro">0</span>
+                <span class="stat-rotulo">Cozinheiros & Chapa</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Barra de Filtros e Busca -->
+    <section class="controles-bar">
+        <div class="busca-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="inputBusca" class="busca-input" placeholder="Buscar por nome ou e-mail..." />
+        </div>
+
+        <div class="filtros-grupo">
+            <button type="button" class="filtro-pill ativo" data-cargo="TODOS">Todos</button>
+            <button type="button" class="filtro-pill" data-cargo="ADMIN">Administradores</button>
+            <button type="button" class="filtro-pill" data-cargo="GARCOM">Garçons</button>
+            <button type="button" class="filtro-pill" data-cargo="COZINHEIRO">Cozinheiros</button>
+        </div>
+    </section>
+
+    <!-- Tabela de Colaboradores -->
+    <section class="tabela-container">
+        <table class="tabela-equipe" id="tabelaEquipe">
+            <thead>
+                <tr>
+                    <th>Colaborador</th>
+                    <th>Cargo</th>
+                    <th>Status</th>
+                    <th>Cadastrado em</th>
+                    <th style="text-align: right;">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabelaEquipe">
+                <!-- Linhas inseridas dinamicamente -->
+            </tbody>
+        </table>
+
+        <div class="estado-vazio" id="estadoVazioEquipe" style="display: none;">
+            <i class="fa-solid fa-user-xmark"></i>
+            <h3>NENHUM COLABORADOR ENCONTRADO</h3>
+            <p>Tente ajustar os termos de busca ou filtros de cargo.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- Modal Cadastrar / Editar Colaborador -->
+<div class="modal-backdrop" id="modalColaborador" style="display: none;">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2 class="modal-titulo" id="modalTitulo">
+                <i class="fa-solid fa-user-gear" style="color: var(--primary-red);"></i>
+                <span id="modalTituloTexto">NOVO COLABORADOR</span>
+            </h2>
+            <button type="button" class="btn-fechar-modal" id="btnFecharModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="formColaborador" class="modal-corpo">
+            <input type="hidden" id="colaboradorId" value="" />
+
+            <div class="campo-form">
+                <label class="campo-label" for="colaboradorNome">Nome Completo *</label>
+                <input type="text" id="colaboradorNome" class="campo-input" required placeholder="Ex: Roberto Ramos" />
+            </div>
+
+            <div class="campo-form">
+                <label class="campo-label" for="colaboradorEmail">E-mail Profissional *</label>
+                <input type="email" id="colaboradorEmail" class="campo-input" required placeholder="Ex: roberto@hamburgueria.com" />
+            </div>
+
+            <div class="campo-form">
+                <label class="campo-label" for="colaboradorCargo">Cargo / Função *</label>
+                <select id="colaboradorCargo" class="campo-select" required>
+                    <option value="ADMIN">Administrador (Acesso total)</option>
+                    <option value="GARCOM">Garçom (Salão & Pedidos)</option>
+                    <option value="COZINHEIRO">Cozinheiro (Painel KDS / Chapa)</option>
+                </select>
+            </div>
+
+            <div class="campo-form">
+                <label class="campo-label" for="colaboradorSenha" id="labelSenha">Senha de Acesso *</label>
+                <input type="password" id="colaboradorSenha" class="campo-input" placeholder="Mínimo 4 caracteres" />
+                <small style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;" id="ajudaSenha">Preencha para cadastrar a senha do colaborador.</small>
+            </div>
+
+            <div class="campo-form" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="colaboradorAtivo" checked style="width: 18px; height: 18px; accent-color: var(--primary-red); cursor: pointer;" />
+                <label for="colaboradorAtivo" style="font-size: 0.9rem; cursor: pointer;">Colaborador Ativo no Sistema</label>
+            </div>
+
+            <div class="modal-acoes">
+                <button type="button" class="btn-cancelar" id="btnCancelarModal">Cancelar</button>
+                <button type="submit" class="btn-primary" id="btnSalvarModal">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span>SALVAR</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Confirmar Exclusão -->
+<div class="modal-backdrop" id="modalExcluir" style="display: none;">
+    <div class="modal-card" style="max-width: 440px; text-align: center;">
+        <div class="modal-corpo" style="padding: 32px 24px;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(220, 38, 38, 0.15); color: var(--primary-red); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 18px;">
+                <i class="fa-solid fa-trash"></i>
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; margin-bottom: 8px;">EXCLUIR COLABORADOR?</h3>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.4;">
+                Tem certeza que deseja remover <strong id="nomeExcluir" style="color: #fff;">este colaborador</strong>? Esta ação não pode ser desfeita.
+            </p>
+
+            <div class="modal-acoes" style="justify-content: center; margin-top: 24px;">
+                <button type="button" class="btn-cancelar" id="btnCancelarExclusao">Cancelar</button>
+                <button type="button" class="btn-primary" id="btnConfirmarExclusao" style="background: var(--primary-red);">
+                    <i class="fa-solid fa-trash"></i>
+                    <span>CONFIRMAR EXCLUSÃO</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container de Toasts -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="../shared/js/auth.js"></script>
+<script src="equipe.service.js"></script>
+<script src="equipe.js"></script>
+</body>
+</html>
