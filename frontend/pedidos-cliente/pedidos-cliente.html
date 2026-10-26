@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Churrasqueiro - Acompanhar Pedido</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../shared/css/global.css">
+    <link rel="stylesheet" href="pedidos-cliente.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-container">
+        <a href="../cardapio/cardapio.html" class="marca-header">
+            <div class="texto-marca">
+                <span class="nome-marca">O CHURRASQUEIRO</span>
+                <span class="segmento-marca">ACOMPANHAR PEDIDO</span>
+            </div>
+        </a>
+
+        <a href="../cardapio/cardapio.html" class="btn-voltar-cardapio">
+            <i class="fa-solid fa-utensils"></i>
+            <span>Voltar ao Cardápio</span>
+        </a>
+    </div>
+</header>
+
+<main class="main-content">
+    <div class="cartao-status-cliente">
+
+        <div class="cabecalho-pedido">
+            <div class="info-comanda">
+                <span class="label-comanda">Comanda</span>
+                <h1 class="numero-comanda" id="numeroComanda">#101</h1>
+            </div>
+            <div class="badge-mesa" id="badgeMesa">
+                <i class="fa-solid fa-chair"></i>
+                <span id="nomeMesa">Mesa 01</span>
+            </div>
+        </div>
+
+        <div class="linha-tempo-wrapper">
+            <div class="linha-progresso-fundo">
+                <div class="linha-progresso-preenchimento" id="linhaProgresso"></div>
+            </div>
+
+            <div class="etapa-status ativa" id="etapaRecebido">
+                <div class="icone-etapa">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <span class="rotulo-etapa">Recebido</span>
+            </div>
+
+            <div class="etapa-status" id="etapaPreparo">
+                <div class="icone-etapa">
+                    <i class="fa-solid fa-fire-burner"></i>
+                </div>
+                <span class="rotulo-etapa">Em preparo</span>
+            </div>
+
+            <div class="etapa-status" id="etapaPronto">
+                <div class="icone-etapa">
+                    <i class="fa-solid fa-bell-concierge"></i>
+                </div>
+                <span class="rotulo-etapa">Pronto!</span>
+            </div>
+        </div>
+
+        <div class="caixa-mensagem-status" id="caixaMensagem">
+            <i class="fa-solid fa-clock icone-mensagem-status"></i>
+            <div>
+                <h3 class="titulo-mensagem-status" id="tituloMensagem">Seu pedido foi recebido!</h3>
+                <p class="subtitulo-mensagem-status" id="subtituloMensagem">A equipe da chapa já está preparando tudo com o padrão Churrasqueiro.</p>
+            </div>
+        </div>
+
+        <div class="secao-resumo-itens">
+            <h2 class="titulo-secao-resumo">Itens Solicitados</h2>
+            <ul class="lista-itens-cliente" id="listaItensCliente"></ul>
+        </div>
+
+        <div class="rodape-pedido">
+            <span class="label-total">Total Pago/A Pagar</span>
+            <span class="valor-total" id="valorTotalCliente">R$ 0,00</span>
+        </div>
+
+    </div>
+</main>
+
+<script src="pedidos-cliente.js"></script>
+</body>
+</html>
