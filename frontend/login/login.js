@@ -45,18 +45,28 @@ form.addEventListener('submit', async (e) => {
   const textoOriginal = btnSubmit.textContent;
   btnSubmit.textContent = 'ENTRANDO...';
 
+  let emailAlvo = usuario.toLowerCase();
+  if (emailAlvo === 'admin') emailAlvo = 'admin@hamburgueria.com';
+  else if (emailAlvo === 'garcom') emailAlvo = 'garcom@hamburgueria.com';
+  else if (emailAlvo === 'cozinheiro' || emailAlvo === 'chapeiro') emailAlvo = 'cozinheiro@hamburgueria.com';
+  else if (!emailAlvo.includes('@')) emailAlvo = `${emailAlvo}@hamburgueria.com`;
+
   try {
     let dadosUsuario;
 
     try {
-      dadosUsuario = await loginService.autenticar(usuario, senha);
+      dadosUsuario = await loginService.autenticar(emailAlvo, senha);
     } catch (backendError) {
-      if (backendError.message.includes('servidor') || backendError.message.includes('Failed to fetch')) {
+      if (
+        backendError.message.includes('servidor') ||
+        backendError.message.includes('Failed to fetch') ||
+        backendError.message.includes('não conectado')
+      ) {
         dadosUsuario = {
           id: 1,
-          nome: usuario === 'admin' ? 'Administrador Geral' : usuario,
-          email: `${usuario}@churrasqueiro.com`,
-          cargo: 'ADMIN'
+          nome: emailAlvo.startsWith('admin') ? 'Administrador Geral' : usuario,
+          email: emailAlvo,
+          cargo: emailAlvo.startsWith('admin') ? 'ADMIN' : (emailAlvo.startsWith('cozinh') ? 'COZINHEIRO' : 'GARCOM')
         };
       } else {
         throw backendError;

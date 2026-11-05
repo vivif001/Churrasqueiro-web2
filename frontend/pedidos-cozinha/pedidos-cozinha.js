@@ -18,22 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    if (typeof configurarHeaderUsuario === 'function') {
+        configurarHeaderUsuario();
+    }
+
     function salvarPedidos(pedidos) {
-        localStorage.setItem(PEDIDOS_KEY, JSON.stringify(pedidos));
+        if (typeof pedidosCozinhaService !== 'undefined' && pedidosCozinhaService.salvarPedidos) {
+            pedidosCozinhaService.salvarPedidos(pedidos);
+        } else {
+            localStorage.setItem(PEDIDOS_KEY, JSON.stringify(pedidos));
+            window.dispatchEvent(new Event('storage'));
+        }
         renderizarPainel();
     }
 
-    function alterarStatusPedido(pedidoId, novoStatus) {
-        const pedidos = obterPedidos();
-        const index = pedidos.findIndex(p => p.id === Number(pedidoId));
-
-        if (index > -1) {
-            if (novoStatus === 'ENTREGUE') {
-                pedidos.splice(index, 1);
-            } else {
+    async function alterarStatusPedido(pedidoId, novoStatus) {
+        if (typeof pedidosCozinhaService !== 'undefined' && pedidosCozinhaService.alterarStatus) {
+            await pedidosCozinhaService.alterarStatus(pedidoId, novoStatus);
+            renderizarPainel();
+        } else {
+            const pedidos = obterPedidos();
+            const index = pedidos.findIndex(p => p.id === Number(pedidoId));
+            if (index > -1) {
                 pedidos[index].status = novoStatus;
+                salvarPedidos(pedidos);
             }
-            salvarPedidos(pedidos);
         }
     }
 
@@ -49,7 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
         countEmPreparo.textContent = preparo;
         countProntos.textContent = prontos;
 
-        if (todosPedidos.length === 0) {
+        const pedidosAtivos = todosPedidos.filter(p => p.status !== 'ENTREGUE');
+
+        if (pedidosAtivos.length === 0) {
             containerGrid.style.display = 'none';
             estadoVazio.style.display = 'block';
             return;
@@ -58,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         containerGrid.style.display = 'grid';
         estadoVazio.style.display = 'none';
 
-        todosPedidos.forEach(pedido => {
+        pedidosAtivos.forEach(pedido => {
             const card = document.createElement('div');
             card.className = `pedido-card-kds status-${pedido.status}`;
 
@@ -130,8 +141,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    btnAtualizar.addEventListener('click', renderizarPainel);
+    async function sincronizarEAtualizar() {
+        if (typeof pedidosCozinhaService !== 'undefined' && pedidosCozinhaService.obterPedidos) {
+            await pedidosCozinhaService.obterPedidos();
+        }
+        renderizarPainel();
+    }
 
-    renderizarPainel();
-    setInterval(renderizarPainel, 3000);
+    btnAtualizar.addEventListener('click', sincronizarEAtualizar);
+    window.addEventListener('storage', renderizarPainel);
+
+    sincronizarEAtualizar();
+    setInterval(sincronizarEAtualizar, 3000);
 });

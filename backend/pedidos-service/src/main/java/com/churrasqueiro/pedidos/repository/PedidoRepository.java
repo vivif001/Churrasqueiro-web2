@@ -13,4 +13,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByStatusNotOrderByDataCriacaoAsc(StatusPedido status);
 
     List<Pedido> findByMesaOrderByDataCriacaoDesc(String mesa);
+
+    List<Pedido> findByStatusOrderByDataCriacaoAsc(StatusPedido status);
+
+    List<Pedido> findAllByOrderByDataCriacaoDesc();
 }

@@ -22,9 +22,16 @@ public class ProdutoService {
 
     @Transactional(readOnly = true)
     public List<ProdutoResponseDTO> listarTodos(CategoriaProduto categoria, Boolean disponivel, String busca) {
-        String termo = (busca != null && !busca.trim().isEmpty()) ? busca.trim() : null;
-        List<Produto> produtos = repository.buscarComFiltros(categoria, disponivel, termo);
-        return produtos.stream().map(ProdutoResponseDTO::fromEntity).toList();
+        String termo = (busca != null && !busca.trim().isEmpty()) ? busca.trim().toLowerCase() : null;
+        List<Produto> produtos = repository.findAll();
+        return produtos.stream()
+                .filter(p -> categoria == null || p.getCategoria() == categoria)
+                .filter(p -> disponivel == null || p.getDisponivel().equals(disponivel))
+                .filter(p -> termo == null ||
+                        (p.getNome() != null && p.getNome().toLowerCase().contains(termo)) ||
+                        (p.getDescricao() != null && p.getDescricao().toLowerCase().contains(termo)))
+                .map(ProdutoResponseDTO::fromEntity)
+                .toList();
     }
 
     @Transactional(readOnly = true)
